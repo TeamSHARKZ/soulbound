@@ -30,7 +30,8 @@ Above diagram demonstrates how the contract system works. *Soul ID* is a single 
 - Token is binding to one wallet address and acts like a single *Soul and UID*.
 - As defined by EIP4973, *Soul ID* implements [ERC721 Metadata interface](https://eips.ethereum.org/EIPS/eip-721) without any ERC721 transfer functions; token meta is viewable on the NFT marketplaces while remaining non-tradable.
 - Token includes a dynamic score trait, the value will be increased or decreased by collecting or burning badge token balance.
-- Scores can come from ERC721 NFT, ERC5114-Soul Badges, and/or even other Soul ID adaptations powered by our ERC4973-Soul Container from external NFT projects. Contract admin can link/unlink any supported badge contracts.
+- Contract admins can link or unlink any supported badge contracts (ERC721, Soul Badge), and scores will be updated.
+- Scores will come from all linked badges. For Soul ID v2, we plan to support *Soul ID as a badge*, allowing aggregated scores for every linked *Soul ID* from other communities.
 - Token images are 100% on-chain generated, and displaying data is customizable by token owner.
 - Token owners can set up guardians; the [approval quorum](https://findhoalaw.com/tag/majority-of-quorum/) can safeguard the identity data from change requests.
 - Support token relocation to a new wallet address by the token owner, using the guardian approval workflow.
