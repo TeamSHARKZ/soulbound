@@ -6,30 +6,34 @@
 <!-- [![Forks][forks-shield]][forks-url] -->
 <!-- [![Stargazers][stars-shield]][stars-url] -->
 
-This repo contains our implementation of [EIP4973](https://eips.ethereum.org/EIPS/eip-4973), [EIP5114](https://eips.ethereum.org/EIPS/eip-5114), and the final contracts, `Soul ID` and `Soul Badge`. By using [Openzeppelin UUPS](https://blog.openzeppelin.com/workshop-recap-deploying-more-efficient-upgradeable-contracts/) upgradeable contract design, our soulbound solution featured a future-proof product with endless possibilities.
+This repository contains our implementation of [EIP4973](https://eips.ethereum.org/EIPS/eip-4973), [EIP5114](https://eips.ethereum.org/EIPS/eip-5114), and our final contracts, namely *Soul ID* and *Soul Badge*. By using [Openzeppelin UUPS](https://blog.openzeppelin.com/workshop-recap-deploying-more-efficient-upgradeable-contracts/) upgradeable contract design, our Soulbound solution featur a future-proof product with endless possibilities.
 
-This is the first of its kind [Soulbound](https://vitalik.ca/general/2022/01/26/soulbound.html) experiment designed and deployed by Sharkz Entertainment.
+## Why UUPS upgradeable?
+
+- Contract data is stored at proxy contract, improvement or bugfix can be done by just deploying new implementation contract.
+- When compared to Transparent proxy and Diamond proxy, UUPS is the most gas efficient proxy pattern for token owners.
+
+This is the first of its kind [Soulbound](https://vitalik.ca/general/2022/01/26/soulbound.html) application for the NFT space, which is designed and deployed by Sharkz Entertainment.
 
 ## Contract design
 
-In the current world of Web3, most people create their social identity with only [EOA wallet](https://ethereum.org/en/glossary/#eoa), however, by design, wallet is meant to be an asset holder, not an identity holder, it lacks many features for a real-life identity.
+In the current world of Web3, most people create their social identity with only [EOA wallet](https://ethereum.org/en/glossary/#eoa). However, by design, a wallet is meant to be an asset holder, not an identity holder, it lacks many features for a real-life identity.
 
-Inspired by the concept of [Soulbound](https://vitalik.ca/general/2022/01/26/soulbound.html) discussed by Vitalik Buterin, we build our soulbound experiment (Soul ID) purely with smart contracts. It provides a socially secured, cencership-free and recoverable identity, allowing identity owner (token owner) to easily store social reputation scores within our ecosystem, we think this technology will help to form the future of [decentralized society](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4105763), where each separated community identities can inter-exchange social scores by a common interface, scores can be aggregated into a parent identity and form a society.
+Inspired by the concept of [Soulbound](https://vitalik.ca/general/2022/01/26/soulbound.html) discussed by Vitalik Buterin, we build our Soulbound Solution (Soul ID) purely with smart contracts. It provides a socially secured, censorship-free and recoverable identity, allowing identity owner (token owner) to easily store social reputation scores within our NFT ecosystem, we think this technology will help to form the future of [decentralized society](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4105763), where each separated community identities can inter-exchange social scores by a [common interface](https://github.com/TeamSHARKZ/soulbound/blob/main/contracts/lib/sharkz/IScore.sol), scores can be aggregated into a parent identity and form a society.
 
 ![Screenshot](docs/soulid-expand.jpg)
 
-Above diagram demonstrates how the contract system works.
-Soul ID is a single `Soul` identity, it is a custom ERC4973 implmentation enforcing 1:1 mapping to a EOA wallet address, it can hold all social scores attached from multiple external badge contracts. Badge contracts support both ERC721 NFT token and our ERC5114-Soul Badges. Soul Badges are designed to work and mint with Soul ID, without any  knowledge of EOA wallet owner, in this way, Soul Badges can be securely and permanently attached to a `Soul` at mint time, maintaining the relationship during any event of Soul ID relocation or recovery.
+Above diagram demonstrates how the contract system works. *Soul ID* is a single Soul identity, it is a custom ERC4973 implementation enforcing 1:1 binding to an EOA wallet address, it can store social scores attached from multiple internal / external badge contracts. Badge contracts support both the ERC721 NFT token and our ERC5114-Soul Badges. Soul Badges are designed to work and mint with Soul ID, without any knowledge of EOA wallet owner, in this way, Soul Badges can be securely and permanently attached to a Soul at mint time, maintaining the relationship during any event of Soul ID relocation or recovery.
 
 ## Main features
 
-- Token is binding to one wallet address and act like a single **Soul**.
-- As defined by EIP-4973, `Soul ID` is implementing [ERC721Metadata](https://eips.ethereum.org/EIPS/eip-721) without any ERC721 transfer functions, token meta is viewable by NFT markplace while remaining non-tradeable.
-- Token included a dynamic score trait, the value will be increased or decreased by collecting or burning badge token balance.
-- Scores can come from any ERC721 NFT or Sharkz' ERC5114-Soul Badges, contract admin can link/unlink any supported badge contracts.
-- Token image is 100% on-chain generated, displaying data is customizable by token owner.
-- Token owner can setup guardians, the [approval quorum](https://findhoalaw.com/tag/majority-of-quorum/) will help safe-guarding identity data change requests.
-- Support token relocation to a new wallet address by token owner, using the guradian approval workflow.
+- Token is binding to one wallet address and acts like a single *Soul and UID*.
+- As defined by EIP4973, *Soul ID* implements [ERC721 Metadata interface](https://eips.ethereum.org/EIPS/eip-721) without any ERC721 transfer functions; token meta is viewable on the NFT marketplaces while remaining non-tradable.
+- Token includes a dynamic score trait, the value will be increased or decreased by collecting or burning badge token balance.
+- Scores can come from ERC721 NFT, ERC5114-Soul Badges, and/or even other Soul ID adaptations powered by our ERC4973-Soul Container from external NFT projects. Contract admin can link/unlink any supported badge contracts.
+- Token images are 100% on-chain generated, and displaying data is customizable by token owner.
+- Token owners can set up guardians; the [approval quorum](https://findhoalaw.com/tag/majority-of-quorum/) can safeguard the identity data from change requests.
+- Support token relocation to a new wallet address by the token owner, using the guardian approval workflow.
 - Support token social-recovery by other guardians, using the guradian approval workflow.
 
 ## Documentation
@@ -43,22 +47,22 @@ Soul ID is a single `Soul` identity, it is a custom ERC4973 implmentation enforc
 
 ### ERC4973 Soul Container
 
-This implementation include many features for real-life usage, by including `ERC721 Metadata` extension, we allow NFT platforms to recognize the token name, symbol and token metadata, ex. token image, token traits. By design, [ERC721](https://eips.ethereum.org/EIPS/eip-721) `transfer`, `operator`, and `approval` functions are all removed, making it non-transferrable by design.
+This implementation includes many features for practical use, by including ERC721 Metadata extension, we allow NFT platforms to recognize the token name, symbol and token metadata, e.g. token image, token traits. By design, [ERC721](https://eips.ethereum.org/EIPS/eip-721) `transfer`, `operator`, and `approval` functions are all removed, making it non-transferrable by design.
 
 ### ERC5114 Soul Badge
 
-This implementation featured a *badge-like* ownership design, token is attached to a `Soul` (`ERC4973` or `ERC721` token) by linking internal `tokenId` to an external contract address and token number, as a `Soul` will eventually resolve to a wallet owner, there is no need to have the Soul Badge token to store any wallet address. During a `Soul` relocation or recovery, the linkage between Soul Badge and Soul ID will be naturally maintained.
+This implementation features a *badge-like* ownership design, token is attached to a Soul ID (ERC4973 token) by linking internal token ID to an external contract address and token number, as a Soul will eventually resolve to a wallet owner, there is no need to have the Soul Badge token to store  wallet address. During a Soul relocation or recovery, the linkage between Soul Badge and Soul ID will be naturally maintained.
 
 ## Installation
 
-After downloading the repo, please first install all necessory NPM modules. Copy the `.env-sample` as `.env`, and fill in all API and test keys.
-
-This repo includes both standard and UUPS upgradeable version of ERC4973 related contracts, and our final product, `Soul ID` and `Soul Badge` contracts.
+After downloading the repo, please first install all necessary NPM modules. Copy the `.env-sample` as `.env`, and fill in all API and test keys.
 
 ```sh
 npm install
 npx hardhat test
 ```
+
+This repo includes both standard and UUPS upgradeable version of ERC4973 related contracts, and our final product, *Soul ID* and *Soul Badge* contracts.
 
 ## License
 
