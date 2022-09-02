@@ -6,14 +6,14 @@
 <!-- [![Forks][forks-shield]][forks-url] -->
 <!-- [![Stargazers][stars-shield]][stars-url] -->
 
-This repository contains our implementation of [EIP4973](https://eips.ethereum.org/EIPS/eip-4973), [EIP5114](https://eips.ethereum.org/EIPS/eip-5114), and our final contracts, namely *Soul ID* and *Soul Badge*. By using [Openzeppelin UUPS](https://blog.openzeppelin.com/workshop-recap-deploying-more-efficient-upgradeable-contracts/) upgradeable contract design, our Soulbound solution featur a future-proof product with endless possibilities.
-
-## Why UUPS upgradeable?
-
-- Contract data is stored at proxy contract, improvement or bugfix can be done by just deploying new implementation contract.
-- When compared to Transparent proxy and Diamond proxy, UUPS is the most gas efficient proxy pattern for token owners.
+This repository contains our implementation of [EIP4973](https://eips.ethereum.org/EIPS/eip-4973), [EIP5114](https://eips.ethereum.org/EIPS/eip-5114), and our final contracts, namely *Soul ID* and *Soul Badge*. By using [Openzeppelin UUPS](https://blog.openzeppelin.com/workshop-recap-deploying-more-efficient-upgradeable-contracts/) upgradeable contract design, our Soulbound Solution features a future-proof product with endless possibilities.
 
 This is the first of its kind [Soulbound](https://vitalik.ca/general/2022/01/26/soulbound.html) application for the NFT space, which is designed and deployed by Sharkz Entertainment.
+
+## UUPS benefits
+
+- Contract data is stored in proxy contract, improvement or bugfix can be done by just deploying new implementation contract.
+- When compared to Transparent proxy and Diamond proxy, UUPS is the most gas efficient proxy pattern for token owners.
 
 ## Contract design
 
@@ -47,7 +47,7 @@ Above diagram demonstrates how the contract system works. *Soul ID* is a single 
 
 ### ERC4973 Soul Container
 
-This implementation includes many features for practical use, by including ERC721 Metadata extension, we allow NFT platforms to recognize the token name, symbol and token metadata, e.g. token image, token traits. By design, [ERC721](https://eips.ethereum.org/EIPS/eip-721) `transfer`, `operator`, and `approval` functions are all removed, making it non-transferrable by design.
+This implementation includes many features for practical usage, by including ERC721 Metadata extension, we allow NFT platforms to recognize the token name, symbol and token metadata, e.g. token image, token traits. By design, transfer related functions, ERC721 transfer, operator, and approval functions are all removed, making it non-transferrable by design.
 
 ### ERC5114 Soul Badge
 
