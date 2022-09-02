@@ -36,7 +36,7 @@ Soul ID is a single `Soul` identity, it is a custom ERC4973 implmentation enforc
 
 - [Soulbound V1 Web3 DApp](https://sharkzent.io/soulbound/v1)
 - [Soulbound Medium article](https://medium.com/@sharkzent/sharkz-soulbound-101-26b5933edcc9)
-- [Soul ID smart contract](https://etherscan.io/address/0x12DEb1Cb5732E40Dd55B89aBB6D5C31dF13A6e38#code)
+- [Soul ID smart contract](https://etherscan.io/address/0x12DEb1Cb5732E40Dd55B89aBB6D5C31dF13A6e38#readProxyContract)
 - [Soul Badge smart contract](https://etherscan.io/address/0x43013825FA33C5CC93b3B72AdE12D58fCFF2d712#code)
 
 ## Soulbound EIP implementations
