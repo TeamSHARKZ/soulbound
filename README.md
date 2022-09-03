@@ -6,7 +6,7 @@
 <!-- [![Forks][forks-shield]][forks-url] -->
 <!-- [![Stargazers][stars-shield]][stars-url] -->
 
-This repository contains our implementation of [EIP4973](https://eips.ethereum.org/EIPS/eip-4973), [EIP5114](https://eips.ethereum.org/EIPS/eip-5114), and our final contracts, namely *Soul ID* and *Soul Badge*. By using [Openzeppelin UUPS](https://blog.openzeppelin.com/workshop-recap-deploying-more-efficient-upgradeable-contracts/) upgradeable contract design, our Soulbound Solution features a future-proof product with endless possibilities.
+This repository contains our implementation of [EIP4973](https://eips.ethereum.org/EIPS/eip-4973), [EIP5114](https://eips.ethereum.org/EIPS/eip-5114), and our final contracts, namely *Soul ID* and *Soul Badge*. By using [Openzeppelin UUPS](https://blog.openzeppelin.com/workshop-recap-deploying-more-efficient-upgradeable-contracts/) upgradeable contract design, our Soulbound Solution features a future-proof product with infinite possibilities.
 
 This is the first of its kind [Soulbound](https://vitalik.ca/general/2022/01/26/soulbound.html) application for the NFT space, which is designed and deployed by Sharkz Entertainment.
 
