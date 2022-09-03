@@ -21,7 +21,7 @@ In the current world of Web3, most people create their social identity with only
 
 Inspired by the concept of [Soulbound](https://vitalik.ca/general/2022/01/26/soulbound.html) discussed by Vitalik Buterin, we build our Soulbound Solution (Soul ID) purely with smart contracts. It provides a socially secured, censorship-free and recoverable identity, allowing identity owner (token owner) to easily store social reputation scores within our NFT ecosystem, we think this technology will help to form the future of [decentralized society](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4105763), where each separated community identities can inter-exchange social scores by a [common interface](https://github.com/TeamSHARKZ/soulbound/blob/main/contracts/lib/sharkz/IScore.sol), scores can be aggregated into a parent identity and form a society.
 
-![Screenshot](docs/soulid-expand.jpg)
+![Screenshot](docs/diagram.png)
 
 Above diagram demonstrates how the contract system works. *Soul ID* is a single Soul identity, it is a custom ERC4973 implementation enforcing 1:1 binding to an EOA wallet address, it can store social scores attached from multiple internal / external badge contracts. Badge contracts support both the ERC721 NFT token and our ERC5114-Soul Badges. Soul Badges are designed to work and mint with Soul ID, without any knowledge of EOA wallet owner, in this way, Soul Badges can be securely and permanently attached to a Soul at mint time, maintaining the relationship during any event of Soul ID relocation or recovery.
 
