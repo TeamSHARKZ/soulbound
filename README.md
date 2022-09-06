@@ -14,7 +14,7 @@ This is the first of its kind [Soulbound](https://vitalik.ca/general/2022/01/26/
 
 - Contract data is stored in proxy contract, improvement or bugfix can be done by just deploying new implementation contract.
 - When compared to Transparent proxy and Diamond proxy, UUPS is the most gas efficient proxy pattern for token owners.
-- Since upgrade method resides in the implementation contract, UUPS provides flexibility to remove upgradeability and remove all logical changes in future, forever.
+- Since upgrade method resides in the implementation contract, UUPS provides flexibility to remove upgradeability, preventing unexpected future change in the contract.
 
 ## Contract design
 
