@@ -21,13 +21,10 @@ contract ERC5114SoulBadge is IERC5114SoulBadge {
     // Structure to store each Soul token's badges data
     // Compiler will pack this into a single 256bit word.
     struct SoulTokenData {
-        // 2**64-1 is more than enough
         // Keep track of final token balance
-        uint64 balance;
+        uint128 balance;
         // Keep track of minted amount
-        uint96 numberMinted;
-        // Keeps track of burn count
-        uint96 numberBurned;
+        uint128 numberMinted;
     }
 
     // Mapping from `Soul contract, Soul tokenId` to token info
@@ -131,11 +128,6 @@ contract ERC5114SoulBadge is IERC5114SoulBadge {
         return uint256(_soulData[soulContract][soulTokenId].numberMinted);
     }
 
-    // Returns the number of tokens burned by `Soul`
-    function _numberBurned(address soulContract, uint256 soulTokenId) internal view returns (uint256) {
-        return uint256(_soulData[soulContract][soulTokenId].numberBurned);
-    }
-
     /**
      * @dev Mints `tokenId` to a Soul (Soul contract, Soul token id)
      *
@@ -185,37 +177,14 @@ contract ERC5114SoulBadge is IERC5114SoulBadge {
     }
 
     /**
-     * @dev Destroys `tokenId`.
-     *
-     * Requirements:
-     * - `tokenId` must exist.
-     * 
-     * Access:
-     * - `tokenId` owner
-     *
-     * Emits {Burn} event.
+     * @dev See {IERC5114-metadataFormat}.
      */
-    function _burn(uint256 tokenId) internal virtual {
-        address soulContract = soulContracts[tokenId];
-        uint256 soulTokenId = soulTokens[tokenId];
-        delete soulContracts[tokenId];
-        delete soulTokens[tokenId];
-        
-        _soulData[soulContract][soulTokenId].balance -= 1;
-        _soulData[soulContract][soulTokenId].numberBurned += 1;
-
-        emit Burn(tokenId, soulContract, soulTokenId);
-    }
-
-    /**
-     * @dev Burns `tokenId`. See {IERC5114-burn}.
-     *
-     * Access:
-     * - `tokenId` owner
-     */
-    function burn(uint256 tokenId) public virtual override {
-        require(soulOwnerOf(tokenId) == _msgSenderERC5114(), "ERC5114SoulBadge: burn from non-owner"); 
-        _burn(tokenId);
+    function metadataFormat() external pure returns (string memory) {
+        // ERC721 Metadata JSON Schema
+        return '{"title": "Asset Metadata","type": "object","properties": {'
+               '"name": {"type": "string","description": "Identifies the asset to which this NFT represents"},'
+               '"description": {"type": "string","description": "Describes the asset to which this NFT represents"},'
+               '"image": {"type": "string","description": "A URI pointing to a resource with mime type image/* representing the asset to which this NFT represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive."}}}';
     }
 
     /**

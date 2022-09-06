@@ -38,9 +38,6 @@ contract SharkzSoulBadge is IScore, Adminable, ReentrancyGuard, EIP712Whitelist,
     // Keep track of total minted token count
     uint256 public tokenMinted;
 
-    // Keep track of total destroyed token
-    uint256 public tokenBurned;
-
     // Mint modes, 0: disable-minting, 1: free-mint, 2: restrict minting to target token owner, 3: restrict to voter
     uint256 public mintMode;
 
@@ -158,7 +155,7 @@ contract SharkzSoulBadge is IScore, Adminable, ReentrancyGuard, EIP712Whitelist,
 
     // Returns total valid token count
     function totalSupply() public view returns (uint256) {
-        return tokenMinted - tokenBurned;
+        return tokenMinted;
     }
 
     // Create a new token for Soul
@@ -215,13 +212,6 @@ contract SharkzSoulBadge is IScore, Adminable, ReentrancyGuard, EIP712Whitelist,
         callerIsSoulOwner(soulContract, soulTokenId)
     {
         _runMint(soulContract, soulTokenId);
-    }
-
-    function burn(uint256 _tokenId) public override {
-      super.burn(_tokenId);
-      unchecked {
-          tokenBurned += 1;
-      }
     }
 
     /**

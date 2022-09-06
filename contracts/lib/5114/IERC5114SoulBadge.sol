@@ -31,15 +31,9 @@ interface IERC721Metadata {
  * (bytes4) 0xb9d11845 = type(IERC5114SoulBadge).interfaceId
  */
 interface IERC5114SoulBadge is IERC165, IERC721Metadata, IERC5114 {
-  // Emits when a token is burnt
-  event Burn(uint256 indexed tokenId, address indexed soulContract, uint256 indexed soulTokenId);
-
   // Returns badge token balance for a `Soul`
   function balanceOfSoul(address soulContract, uint256 soulTokenId) external view returns (uint256);
 
   // Returns the `Soul` token owner address
   function soulOwnerOf(uint256 tokenId) external view returns (address);
-  
-  // Destroys token
-  function burn(uint256 tokenId) external;
 }
