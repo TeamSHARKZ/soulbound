@@ -96,7 +96,7 @@ describe('Sharkz Soul Badge', function () {
     await contract.ownerMint(soulContract.address, 0);
     await expect(
       contract.ownerMint(soulContract.address, 0)
-    ).to.be.revertedWith('ERC5114SoulBadge: max token per soul reached');
+    ).to.be.revertedWith('ERC5114SoulBadge: max minting per soul reached');
 
     // mint by Soul #1
     await contract.ownerMint(soulContract.address, 1);

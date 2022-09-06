@@ -18,26 +18,14 @@ interface IOwnerOf {
 }
 
 contract ERC5114SoulBadge is IERC5114SoulBadge {
-    // Structure to store each Soul token's badges data
-    // Compiler will pack this into a single 256bit word.
-    struct SoulTokenData {
-        // Keep track of final token balance
-        uint128 balance;
-        // Keep track of minted amount
-        uint128 numberMinted;
-    }
-
-    // Mapping from `Soul contract, Soul tokenId` to token info
-    mapping (address => mapping (uint256 => SoulTokenData)) internal _soulData;
+    // Mapping from `Soul contract, Soul tokenId` to token balance
+    mapping (address => mapping (uint256 => uint256)) internal _soulData;
 
     // Mapping from `badge tokenId` to `Soul contract`
     mapping (uint256 => address) public soulContracts;
 
     // Mapping from `badge tokenId` to `Soul tokenId`
     mapping (uint256 => uint256) public soulTokens;
-
-    // How many badges can be attached to a `Soul`, zero means unlimited
-    uint256 public maxTokenPerSoul;
 
     // How many badges can be minted from a `Soul`, zero means unlimited
     uint256 public maxMintPerSoul;
@@ -59,8 +47,7 @@ contract ERC5114SoulBadge is IERC5114SoulBadge {
         symbol = symbol_;
         collectionInfo = collectionUri_;
         tokenBaseUri = tokenBaseUri_;
-        maxTokenPerSoul = 1;
-        maxMintPerSoul = 0;
+        maxMintPerSoul = 1;
     }
 
     /**
@@ -105,7 +92,7 @@ contract ERC5114SoulBadge is IERC5114SoulBadge {
      */
     function balanceOfSoul(address soulContract, uint256 soulTokenId) external view virtual override returns (uint256) {
         require(soulContract != address(0), "ERC5114SoulBadge: balance query for the zero address");
-        return _soulData[soulContract][soulTokenId].balance;
+        return _soulData[soulContract][soulTokenId];
     }
 
     /**
@@ -123,11 +110,6 @@ contract ERC5114SoulBadge is IERC5114SoulBadge {
         return _getSoul(tokenId);
     }
 
-    // Returns the number of tokens minted by `Soul`
-    function _numberMinted(address soulContract, uint256 soulTokenId) internal view returns (uint256) {
-        return uint256(_soulData[soulContract][soulTokenId].numberMinted);
-    }
-
     /**
      * @dev Mints `tokenId` to a Soul (Soul contract, Soul token id)
      *
@@ -142,15 +124,13 @@ contract ERC5114SoulBadge is IERC5114SoulBadge {
     function _mint(uint256 tokenId, address soulContract, uint256 soulTokenId) internal virtual {
         require(soulContract != address(0), "ERC5114SoulBadge: mint to the zero address");
         require(!_exists(tokenId), "ERC5114SoulBadge: token already minted");
-        require(maxTokenPerSoul == 0 || _soulData[soulContract][soulTokenId].balance < maxTokenPerSoul, "ERC5114SoulBadge: max token per soul reached");
-        require(maxMintPerSoul == 0 || _soulData[soulContract][soulTokenId].numberMinted < maxMintPerSoul, "ERC5114SoulBadge: max minting per soul reached");
+        require(maxMintPerSoul == 0 || _soulData[soulContract][soulTokenId] < maxMintPerSoul, "ERC5114SoulBadge: max minting per soul reached");
 
         // Overflows are incredibly unrealistic.
         unchecked {
             soulContracts[tokenId] = soulContract;
             soulTokens[tokenId] = soulTokenId;
-            _soulData[soulContract][soulTokenId].balance += 1;
-            _soulData[soulContract][soulTokenId].numberMinted += 1;
+            _soulData[soulContract][soulTokenId] += 1;
         }
 
         emit Mint(tokenId, soulContract, soulTokenId);
