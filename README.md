@@ -26,6 +26,14 @@ Inspired by the concept of [Soulbound](https://vitalik.ca/general/2022/01/26/sou
 
 Above diagram demonstrates how the contract system works. *Soul ID* is a single Soul identity, it is a custom ERC4973 implementation enforcing 1:1 binding to an EOA wallet address, it can store social scores attached from multiple internal / external badge contracts. Badge contracts support both the ERC721 NFT token and our ERC5114-Soul Badges. Soul Badges are designed to work and mint with Soul ID, without any knowledge of EOA wallet owner, in this way, Soul Badges can be securely and permanently attached to a Soul at mint time, maintaining the relationship during any event of Soul ID relocation or recovery.
 
+## Soulbound **SOCIAL RECOVERY**
+
+When someone loses their wallet, the Soul ID can be relocated to a different wallet. We call it **Social Recovery**. You can set a number of Guardian wallet addresses after you have claimed the Soul ID.
+
+Your guardian submits a renewal request of your lost Soul ID. He or she now serves as your requester for the recovery. After reaching the approval quorums (1/N + 1 approvals, the N approvers included token owner and guardians), your Requester from now on is solely responsible for assigning your Soul ID to a new wallet address.
+
+![Screenshot](docs/approval.jpg)
+
 ## Main features
 
 - Token is binding to one wallet address and acts like a single *Soul and UID*.
