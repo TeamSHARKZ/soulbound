@@ -1,12 +1,14 @@
 const { expect } = require('chai');
-const { ethers, upgrades } = require('hardhat');
+const { ethers } = require('hardhat');
 
-describe('Sharkz Soul ID - upgradeable', function () {
+describe('Sharkz Soul ID', function () {
   let ownerKey;
   let signerKey;
   let guestKey;
   let guestKey2;
   let guestKey3;
+  let guestKey4;
+  let guestKey5;
   let contract;
   let dataContract;
   let nftContract;
@@ -20,15 +22,16 @@ describe('Sharkz Soul ID - upgradeable', function () {
     guestKey = accounts[3];
     guestKey2 = accounts[4];
     guestKey3 = accounts[5];
+    guestKey4 = accounts[6];
+    guestKey5 = accounts[7];
 
     // PFP contract
     const TokenNFT = await ethers.getContractFactory('NFTERC721');
     nftContract = await TokenNFT.deploy();
 
     // Soul ID contract
-    // deploy v1
-    const v1 = await ethers.getContractFactory('SharkzSoulIDV1');
-    contract = await upgrades.deployProxy(v1, []);
+    const Token = await ethers.getContractFactory('SharkzSoulID');
+    contract = await Token.deploy();
     await contract.deployed();
     // enable anyone to mint
     await contract.setMintMode(1);
@@ -59,21 +62,6 @@ describe('Sharkz Soul ID - upgradeable', function () {
     );
     await badgeContract2.deployed();
     await badgeContract2.setMintMode(1);
-  });
-
-  it('v1.1 -> v2 -> v1.1', async function () {
-    await contract.setAdmin(guestKey.address, true);
-    expect(await contract.version()).to.equal('1.1');
-
-    // upgrade to v2
-    const v2Contract = await ethers.getContractFactory('SharkzSoulIDV2');
-    contract = await upgrades.upgradeProxy(contract.address, v2Contract, []);
-    expect(await contract.version()).to.equal('2');
-
-    // rewind to v1
-    const v1Contract = await ethers.getContractFactory('SharkzSoulIDV1');
-    contract = await upgrades.upgradeProxy(contract.address, v1Contract, []);
-    expect(await contract.version()).to.equal('1.1');
   });
 
   it(`tokenBadgeTraits() attach ERC721 badge`, async function () {

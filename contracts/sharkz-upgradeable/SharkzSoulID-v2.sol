@@ -23,5 +23,5 @@ import "./SharkzSoulID-v1.sol";
 
 contract SharkzSoulIDV2 is SharkzSoulIDV1 {
     // Implementation version number
-    function version() external pure virtual override returns (uint256) { return 2; }
+    function version() external pure virtual override returns (string memory) { return "2"; }
 }

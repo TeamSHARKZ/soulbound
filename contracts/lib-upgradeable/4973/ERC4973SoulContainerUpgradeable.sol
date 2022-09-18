@@ -315,7 +315,7 @@ contract ERC4973SoulContainerUpgradeable is IERC721Metadata, IERC4973SoulContain
      * Returns whether renew request approved
      *
      * Valid approvers = N = 1 + guardians (1 from token owner)
-     * Mininum one guardian is neededto build the quorum system.
+     * Mininum one guardian is needed to build the quorum system.
      *
      * Approval quorum = N / 2 + 1
      * For example: 3 approvers = 2 quorum needed

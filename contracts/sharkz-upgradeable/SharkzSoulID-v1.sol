@@ -30,7 +30,7 @@ import "../lib-upgradeable/4973/ERC4973SoulContainerUpgradeable.sol";
 
 contract SharkzSoulIDV1 is IScore, Initializable, UUPSUpgradeable, AdminableUpgradeable, EIP712WhitelistUpgradeable, ERC4973SoulContainerUpgradeable, ReentrancyGuardUpgradeable {
     // Implementation version number
-    function version() external pure virtual returns (uint256) { return 1; }
+    function version() external pure virtual returns (string memory) { return "1.1"; }
     
     // Emits when new Badge contract is registered
     event BadgeContractLinked(address indexed addr);
