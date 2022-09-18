@@ -43,11 +43,11 @@ contract ERC5114SoulBadgeUpgradeable is IERC5114SoulBadge, Initializable {
     // Immuntable token base uri
     string public tokenBaseUri;
 
-    function __ERC5114SoulBadgeUpgradeable_init(string memory name_, string memory symbol_, string memory collectionUri_, string memory tokenBaseUri_) internal onlyInitializing {
-        __ERC5114SoulBadgeUpgradeable_init_unchained(name_, symbol_, collectionUri_, tokenBaseUri_);
+    function __ERC5114SoulBadge_init(string memory name_, string memory symbol_, string memory collectionUri_, string memory tokenBaseUri_) internal onlyInitializing {
+        __ERC5114SoulBadge_init_unchained(name_, symbol_, collectionUri_, tokenBaseUri_);
     }
 
-    function __ERC5114SoulBadgeUpgradeable_init_unchained(string memory name_, string memory symbol_, string memory collectionUri_, string memory tokenBaseUri_) internal onlyInitializing {
+    function __ERC5114SoulBadge_init_unchained(string memory name_, string memory symbol_, string memory collectionUri_, string memory tokenBaseUri_) internal onlyInitializing {
         name = name_;
         symbol = symbol_;
         collectionInfo = collectionUri_;

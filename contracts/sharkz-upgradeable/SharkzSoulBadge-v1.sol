@@ -69,7 +69,7 @@ contract SharkzSoulBadgeV1 is IScore, Initializable, UUPSUpgradeable, AdminableU
         __Adminable_init();
         __ReentrancyGuard_init();
         __EIP712Whitelist_init();
-        __ERC5114SoulBadgeUpgradeable_init(_name, _symbol, _collectionUri, "");
+        __ERC5114SoulBadge_init(_name, _symbol, _collectionUri, "");
         // token image is a immuntable fixed uri for all tokens
         tokenImageUri = _tokenImageUri;
         // default mint supply 10k
