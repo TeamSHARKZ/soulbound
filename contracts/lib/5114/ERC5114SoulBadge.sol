@@ -123,6 +123,7 @@ contract ERC5114SoulBadge is IERC5114SoulBadge {
      */
     function _mint(uint256 tokenId, address soulContract, uint256 soulTokenId) internal virtual {
         require(soulContract != address(0), "ERC5114SoulBadge: mint to the zero address");
+        require(_getSoulOwnerAddress(soulContract, soulTokenId) != address(0), "ERC5114SoulBadge: mint to a soul without owner");
         require(!_exists(tokenId), "ERC5114SoulBadge: token already minted");
         require(maxMintPerSoul == 0 || _soulData[soulContract][soulTokenId] < maxMintPerSoul, "ERC5114SoulBadge: max minting per soul reached");
 
