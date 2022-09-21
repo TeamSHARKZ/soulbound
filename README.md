@@ -38,7 +38,7 @@ Your guardian submits a renewal request of your lost Soul ID. He or she now serv
 
 - Token is binding to one wallet address and acts like a single *Soul and UID*.
 - As defined by EIP4973, *Soul ID* implements [ERC721 Metadata interface](https://eips.ethereum.org/EIPS/eip-721) without any ERC721 transfer functions; token meta is viewable on the NFT marketplaces while remaining non-tradable.
-- Token includes a dynamic score trait, the value will be increased or decreased by collecting or burning badge token balance.
+- Token includes a dynamic score trait, the value will be increased by collecting more badges.
 - Contract admins can link or unlink any supported badge contracts (ERC721, Soul Badge), and scores will be updated.
 - Scores will come from all linked badges. For Soul ID v2, we plan to support *Soul ID as a badge*, allowing aggregated scores for every linked *Soul ID* from other communities.
 - Token images are 100% on-chain generated, and displaying data is customizable by token owner.
