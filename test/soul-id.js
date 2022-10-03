@@ -51,7 +51,7 @@ describe('Sharkz Soul ID', function () {
       'ipfs://tokenBaseUri/'
     );
     await badgeContract1.deployed();
-    await badgeContract1.setMintMode(1);
+    await badgeContract1.setMintConfig(1, 10000, 0, 0, 1);
 
     // deploy badge2
     badgeContract2 = await Badge.deploy(
@@ -61,7 +61,7 @@ describe('Sharkz Soul ID', function () {
       'ipfs://tokenBaseUri/'
     );
     await badgeContract2.deployed();
-    await badgeContract2.setMintMode(1);
+    await badgeContract2.setMintConfig(1, 10000, 0, 0, 1);
   });
 
   it(`tokenBadgeTraits() attach ERC721 badge`, async function () {

@@ -28,9 +28,6 @@ contract ERC5114SoulBadgeUpgradeable is IERC5114SoulBadge, Initializable {
     // Mapping from `badge tokenId` to `Soul tokenId`
     mapping (uint256 => uint256) public soulTokens;
 
-    // How many badges can be minted from a `Soul`, zero means unlimited
-    uint256 public maxMintPerSoul;
-
     // Token name {IERC5114SoulBadge-name}
     string public name;
 
@@ -52,7 +49,6 @@ contract ERC5114SoulBadgeUpgradeable is IERC5114SoulBadge, Initializable {
         symbol = symbol_;
         collectionInfo = collectionUri_;
         tokenBaseUri = tokenBaseUri_;
-        maxMintPerSoul = 1;
     }
 
     /**
@@ -128,9 +124,8 @@ contract ERC5114SoulBadgeUpgradeable is IERC5114SoulBadge, Initializable {
      */
     function _mint(uint256 tokenId, address soulContract, uint256 soulTokenId) internal virtual {
         require(soulContract != address(0), "ERC5114SoulBadge: mint to the zero address");
-        require(_getSoulOwnerAddress(soulContract, soulTokenId) != address(0), "ERC5114SoulBadge: mint to a soul without owner");
+        require(_getSoulOwnerAddress(soulContract, soulTokenId) != address(0), "ERC5114SoulBadge: Soul token owner not found");
         require(!_exists(tokenId), "ERC5114SoulBadge: token already minted");
-        require(maxMintPerSoul == 0 || _soulData[soulContract][soulTokenId] < maxMintPerSoul, "ERC5114SoulBadge: max minting per soul reached");
 
         // Overflows are incredibly unrealistic.
         unchecked {

@@ -40,14 +40,22 @@ contract SharkzSoulBadgeV1 is IScore, Initializable, UUPSUpgradeable, AdminableU
     // Implementation version number
     function version() external pure virtual returns (string memory) { return "1.1"; }
 
-    // Keep track of total minted token count
-    uint256 public tokenMinted;
+    struct MintConfig {
+        // Mint modes, 0: disable-minting, 1: free-mint, 2: restrict minting to target token owner, 3: restrict to voter
+        uint8 mintMode;
+        // Max mint supply, max 65535
+        uint16 mintSupply;
+        // Start time of minting
+        uint40 mintStartTime;
+        // End time of minting
+        uint40 mintEndTime;
+        // How many badges can be minted from a `Soul`, zero means unlimited
+        uint8 maxMintPerSoul;
 
-    // Mint modes, 0: disable-minting, 1: free-mint, 2: restrict minting to target token owner, 3: restrict to voter
-    uint256 public mintMode;
-
-    // Max mint supply
-    uint256 public mintSupply;
+        // Keep track of total minted token count, max 2^128 - 1
+        uint128 tokenMinted;
+    }
+    MintConfig public mintConfig;
     
     // Target token contract for limited minting
     address public tokenContract;
@@ -73,7 +81,9 @@ contract SharkzSoulBadgeV1 is IScore, Initializable, UUPSUpgradeable, AdminableU
         // token image is a immuntable fixed uri for all tokens
         tokenImageUri = _tokenImageUri;
         // default mint supply 10k
-        mintSupply = 10000;
+        mintConfig.mintSupply = 10000;
+        // by default, one Soul can only mint 1 badge
+        mintConfig.maxMintPerSoul = 1;
     }
 
     // only admins can upgrade the contract
@@ -138,14 +148,13 @@ contract SharkzSoulBadgeV1 is IScore, Initializable, UUPSUpgradeable, AdminableU
         _;
     }
 
-    // Change minting mode
-    function setMintMode(uint256 _mode) external virtual onlyAdmin {
-        mintMode = _mode;
-    }
-
-    // Change mint supply
-    function setMintSupply(uint256 _max) external virtual onlyAdmin {
-        mintSupply = _max;
+    // Change mint settings
+    function setMintConfig(uint8 _mode, uint16 _mintSupply, uint40 _startTime, uint40 _endTime, uint8 _maxPerSoul) external virtual onlyAdmin {
+        mintConfig.mintMode = _mode;
+        mintConfig.mintSupply = _mintSupply;
+        mintConfig.mintStartTime = _startTime;
+        mintConfig.mintEndTime = _endTime;
+        mintConfig.maxMintPerSoul = _maxPerSoul;
     }
 
     // Update linking IBalanceOf contract address
@@ -166,22 +175,27 @@ contract SharkzSoulBadgeV1 is IScore, Initializable, UUPSUpgradeable, AdminableU
 
     // Returns total valid token count
     function totalSupply() public view returns (uint256) {
-        return tokenMinted;
+        return mintConfig.tokenMinted;
     }
 
     // Create a new token for Soul
-    function _runMint(address soulContract, uint256 soulTokenId) 
+    function _runMint(address soulContract, uint256 soulTokenId, bool skipModeCheck) 
         private 
         nonReentrant 
         onlyProxy
     {
-        require(mintMode > 0, 'Minting disabled');
-        require(tokenMinted < mintSupply, 'Max minting supply reached');
+        MintConfig memory config = mintConfig;
+        require(config.mintMode > 0 || skipModeCheck, 'Minting disabled');
+        require(config.tokenMinted < config.mintSupply, 'Max minting supply reached');
+        require(config.maxMintPerSoul == 0 || _soulData[soulContract][soulTokenId] < config.maxMintPerSoul, "Max minting per soul reached");
+        uint256 time = block.timestamp;
+        require(config.mintStartTime == 0 || time >= config.mintStartTime, "Minting is not started");
+        require(config.mintEndTime == 0 || time < config.mintEndTime, "Minting ended");
 
-        // mint to Soul contract and Soul tokenId
-        _mint(tokenMinted, soulContract, soulTokenId);
+        // mint badge to the Soul (Soul contract, Soul tokenId), start from #0
+        _mint(mintConfig.tokenMinted, soulContract, soulTokenId);
         unchecked {
-          tokenMinted += 1;
+          mintConfig.tokenMinted += 1;
         }
     }
 
@@ -190,14 +204,14 @@ contract SharkzSoulBadgeV1 is IScore, Initializable, UUPSUpgradeable, AdminableU
         external 
         onlyAdmin 
     {
-        _runMint(soulContract, soulTokenId);
+        _runMint(soulContract, soulTokenId, true);
     }
 
     // Minting from claim contract
     function claimMint(address soulContract, uint256 soulTokenId) external {
         require(_claimContract != address(0), "Linked claim contract is not set");
         require(_claimContract == msg.sender, "Caller is not claim contract");
-        _runMint(soulContract, soulTokenId);
+        _runMint(soulContract, soulTokenId, false);
     }
 
     // Public minting, limited to Soul Token owner
@@ -206,17 +220,17 @@ contract SharkzSoulBadgeV1 is IScore, Initializable, UUPSUpgradeable, AdminableU
         callerIsUser() 
         callerIsSoulOwner(soulContract, soulTokenId)
     {
-        if (mintMode == 2) {
+        if (mintConfig.mintMode == 2) {
             // target token owner
             require(tokenContract != address(0), "Token contract is the zero address");
             require(_isExternalTokenOwner(tokenContract, msg.sender), "Caller is not target token owner");
         }
-        if (mintMode == 3) {
+        if (mintConfig.mintMode == 3) {
             // target poll voter
             require(voteContract != address(0), "Vote contract is the zero address");
             require(isVoter(voteContract, votePollId, msg.sender), "Caller is not voter");
         }
-        _runMint(soulContract, soulTokenId);
+        _runMint(soulContract, soulTokenId, false);
     }
 
     // Minting with signature from contract EIP712 signer, limited to Soul Token owner
@@ -226,7 +240,7 @@ contract SharkzSoulBadgeV1 is IScore, Initializable, UUPSUpgradeable, AdminableU
         callerIsUser 
         callerIsSoulOwner(soulContract, soulTokenId)
     {
-        _runMint(soulContract, soulTokenId);
+        _runMint(soulContract, soulTokenId, false);
     }
 
     /**
